@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{52EB5D29-451B-3467-DD94-DF9401C3997D}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "WEDLIKE",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMG",
+				"Engine",
+				"EasyGameKit"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true
+		}
+	]
+}
