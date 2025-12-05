@@ -54,18 +54,27 @@ void AGameProp::OnHealthChange(int32 NewCurrentHealth, int32 NewMaxHealth)
 			ENCPoolMethod::AutoRelease,
 			true);
 	}
+
+	if (HitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			HitSound,
+			GetActorLocation()
+		);
+	}
 }
 
 void AGameProp::OnHealthZero()
 {
-	if (DeathEffect)
+	if (DestroyedEffect)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
-			DeathEffect,
+			DestroyedEffect,
 			GetActorLocation(),
 			FRotator::ZeroRotator,
-			DeathEffectScale,
+			DestroyedEffectScale,
 			true,
 			true,
 			ENCPoolMethod::AutoRelease,
@@ -73,11 +82,11 @@ void AGameProp::OnHealthZero()
 		);
 	}
 
-	if (DeathSound)
+	if (DestroyedSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(
 			this,
-			DeathSound,
+			DestroyedSound,
 			GetActorLocation()
 		);
 	}

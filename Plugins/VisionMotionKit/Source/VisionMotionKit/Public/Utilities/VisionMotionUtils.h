@@ -12,6 +12,10 @@ namespace MotionCapture // 네임스페이스로 충돌 예방
     static constexpr int32 COCO_RWR = 10;
     static constexpr int32 COCO_LHIP = 11;
     static constexpr int32 COCO_RHIP = 12;
+    static constexpr int32 COCO_LKNEE = 13;
+    static constexpr int32 COCO_RKNEE = 14;
+    static constexpr int32 COCO_LANKLE = 15;
+    static constexpr int32 COCO_RANKLE = 16;
 
     // COCO skeleton edges
     static const int32 EDGES[][2] = {

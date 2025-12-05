@@ -44,7 +44,8 @@ void AGamePropSpawner::SpawnAndScheduleNext()
 		return;
 	}
 
-	SpawnFallingProp();
+	AGameProp* GameProp = BeginSpawnGameProp();
+	GameProp = EndSpawnGameProp(GameProp);
 
 	float SpawnInterval = GameStageToSpawnInterval[GetBattleGameState()->GetCurrentGameStage()];
 
@@ -92,27 +93,27 @@ FVector AGamePropSpawner::GetRandomPointInSpawnBox() const
 }
 
 
-AGameProp* AGamePropSpawner::SpawnFallingProp()
+AGameProp* AGamePropSpawner::BeginSpawnGameProp()
 {
 	TSubclassOf<AGameProp> PropClass = GetRandomClass(GamePropClasses);
 
 	if (PropClass)
 	{
-		AGameProp* FallingProp = Cast<AGameProp>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, PropClass,
-			FTransform(GetRandomPointInSpawnBox()),
+		AGameProp* GameProp = Cast<AGameProp>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, PropClass,
+			FTransform(FRotator(), GetRandomPointInSpawnBox(), SpawnScale),
 			ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn));
 
-		if (FallingProp)
-		{
-			EGameStage GameStage = GetBattleGameState()->GetCurrentGameStage();
-
-			UGameplayStatics::FinishSpawningActor(FallingProp, FallingProp->GetActorTransform());
-
-			return FallingProp;
-		}
+		return GameProp;
 	}
 
 	return nullptr;
+}
+
+AGameProp* AGamePropSpawner::EndSpawnGameProp(AGameProp* OnGoingGamePeop)
+{
+	UGameplayStatics::FinishSpawningActor(OnGoingGamePeop, OnGoingGamePeop->GetActorTransform());
+
+	return OnGoingGamePeop;
 }
 
 void AGamePropSpawner::ClearTimerNextTick()

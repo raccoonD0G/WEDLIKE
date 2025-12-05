@@ -16,11 +16,11 @@ ABattlePlayerState::ABattlePlayerState()
 	PropCounts.Add(EPropType::Tangerine, 0);
 	PropCounts.Add(EPropType::Topokki, 0);
 
-	PropScores.Add(EPropType::OriginalRamyun, 300);
-	PropScores.Add(EPropType::ShrimpRamyun, 50);
-	PropScores.Add(EPropType::SpicyRamyun, 50);
-	PropScores.Add(EPropType::Tangerine, 300);
-	PropScores.Add(EPropType::Topokki, 300);
+	PropActionScores.Add(EPropType::OriginalRamyun, 10000);
+	PropActionScores.Add(EPropType::ShrimpRamyun, 10000);
+	PropActionScores.Add(EPropType::Tangerine, 10000);
+	PropActionScores.Add(EPropType::Topokki, 10000);
+	PropActionScores.Add(EPropType::SpicyRamyun, 10000);
 }
 
 void ABattlePlayerState::BeginPlay()
@@ -42,7 +42,7 @@ void ABattlePlayerState::IncreasePropCount(EPropType PropType)
 	
 	if (PropCounts[PropType] % PlayVideoCount == 0)
 	{
-		EmailScoreSubsystem->AddLastScore(PropScores[PropType]);
+		EmailScoreSubsystem->AddLastScore(PropActionScores[PropType]);
 		PlayVideoByType(PropType);
 	}
 

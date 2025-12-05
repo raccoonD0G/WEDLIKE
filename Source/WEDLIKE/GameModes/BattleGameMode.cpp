@@ -19,6 +19,9 @@ void ABattleGameMode::BeginPlay()
 	
 	BindGameStageEvents();
 
+	URecordingSubsystem* RecordingSubsystem = GetGameInstance()->GetSubsystem<URecordingSubsystem>();
+	RecordingSubsystem->StartRecording();
+
 	UWEDLikeGameInstance* WEDLikeGameInstance = Cast<UWEDLikeGameInstance>(GetGameInstance());
 	check(WEDLikeGameInstance);
 
@@ -29,6 +32,14 @@ void ABattleGameMode::BeginPlay()
 
 	UEmailScoreSubsystem* EmailScoreSubsystem = GetGameInstance()->GetSubsystem<UEmailScoreSubsystem>();
 	check(EmailScoreSubsystem);
+}
+
+void ABattleGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	URecordingSubsystem* RecordingSubsystem = GetGameInstance()->GetSubsystem<URecordingSubsystem>();
+	RecordingSubsystem->StopRecording();
 }
 
 
@@ -54,9 +65,6 @@ void ABattleGameMode::StartGame()
 
 void ABattleGameMode::EndGame()
 {
-	URecordingSubsystem* RecordingSubsystem = GetGameInstance()->GetSubsystem<URecordingSubsystem>();
-	RecordingSubsystem->StopRecording();
-
 	SaveEmailCSV();
 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);

@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class RecordKit : ModuleRules
@@ -50,5 +51,22 @@ public class RecordKit : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-	}
+
+        if (Target.Platform == UnrealTargetPlatform.Win64)
+        {
+            PublicSystemLibraries.Add("shcore.lib");
+        }
+
+        string FFmpegDir = Path.Combine(PluginDirectory, "ThirdParty", "FFmpeg");
+
+        if (Directory.Exists(FFmpegDir))
+        {
+            string[] Files = Directory.GetFiles(FFmpegDir, "*.*", SearchOption.AllDirectories);
+
+            foreach (string File in Files)
+            {
+                RuntimeDependencies.Add(File);
+            }
+        }
+    }
 }

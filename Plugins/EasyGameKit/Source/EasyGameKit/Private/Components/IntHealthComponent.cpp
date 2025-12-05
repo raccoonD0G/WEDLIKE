@@ -15,16 +15,32 @@ void UIntHealthComponent::BeginPlay()
 	CurrentHealth = MaxHealth;
 }
 
+void UIntHealthComponent::SetMaxHealth(int32 NewMaxHealth)
+{
+	MaxHealth = NewMaxHealth;
+
+}
+
+void UIntHealthComponent::SetFullHealth()
+{
+	SetCurrentHealth(MaxHealth);
+}
+
 void UIntHealthComponent::DoIntHealthDamage(int32 DamageAmount)
 {
 	if (CurrentHealth <= 0) return;
 
-	CurrentHealth -= DamageAmount;
-	OnHealthChangeDelegate.Broadcast(CurrentHealth, MaxHealth);
+	SetCurrentHealth(CurrentHealth - DamageAmount);
 
 	if (CurrentHealth <= 0)
 	{
 		OnHealthZeroDelegate.Broadcast();
 	}
 
+}
+
+void UIntHealthComponent::SetCurrentHealth(int32 NewCurrentHealth)
+{
+	CurrentHealth = NewCurrentHealth;
+	OnHealthChangeDelegate.Broadcast(CurrentHealth, MaxHealth);
 }

@@ -10,6 +10,8 @@
 #include "Components/TimerComponent.h"
 #include "Components/WidgetSwitcher.h"
 #include <Subsystems/EmailScoreSubsystem.h>
+#include <Kismet/GameplayStatics.h>
+#include "Components/AudioComponent.h"
 
 void UBattleWidget::NativeConstruct()
 {
@@ -58,6 +60,8 @@ void UBattleWidget::PlayVideoByType(EPropType VideoType)
 {
 	if (!VideoPlayer) return;
 
+	if (VideoPlayer->IsPlaying()) return;
+
 	if (!(VideoSources.Find(VideoType))) return;
 
 	UMediaSource* Source = VideoSources.Find(VideoType)->LoadSynchronous();
@@ -66,6 +70,17 @@ void UBattleWidget::PlayVideoByType(EPropType VideoType)
 	VideoImage->SetVisibility(ESlateVisibility::Visible);
 
 	const bool bWillOpen = VideoPlayer->OpenSource(Source);
+
+	if (!(CheerSounds.IsEmpty()))
+	{
+		int32 SoundIndex = FMath::RandRange(0, CheerSounds.Num());
+
+		UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, CheerSounds[SoundIndex]);
+		if (AudioComponent)
+		{
+			AudioComponent->Play();
+		}
+	}
 }
 
 void UBattleWidget::HandleVideoFinished()

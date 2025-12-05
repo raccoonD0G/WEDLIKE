@@ -119,7 +119,17 @@ void UUserInputWidget::OnEmailCommitted(const FText& Text, ETextCommit::Type Com
 
 void UUserInputWidget::OnSaveButtonClicked()
 {
-	SaveEmail(EmailInputEditableText->GetText());
+	if (IsValidEmailFormat(EmailInputEditableText->GetText().ToString()))
+	{
+		EmailErrorText->SetVisibility(ESlateVisibility::Hidden);
+		EmailErrorImage->SetVisibility(ESlateVisibility::Hidden);
+
+		SaveEmail(EmailInputEditableText->GetText());
+	}
+	else
+	{
+		PlayEmailErrorAnimation();
+	}
 }
 
 void UUserInputWidget::OnDelButtonClicked()

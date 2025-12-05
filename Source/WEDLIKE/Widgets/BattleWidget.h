@@ -123,4 +123,9 @@ private:
 
 	void ShowGameOverWidget();
 	void HideGameOverWidget();
+
+// Sound Section
+private:
+	UPROPERTY(EditAnywhere)
+	TArray<TObjectPtr<class USoundBase>> CheerSounds;
 };

@@ -29,4 +29,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MaxScoreDuration = 2.0f;
+
+// Sound Section
+private:
+	UPROPERTY()
+	TObjectPtr<class USoundBase> NewRecordSound;
 };

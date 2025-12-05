@@ -79,4 +79,15 @@ public:
 
 private:
 	uint8 bIsAgreed : 1 = false;
+
+// Sound Section
+private:
+	UPROPERTY()
+	class UAudioComponent* BGMComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* BGMAsset;
+
+	void PlayBGM();
+	void StopBGM();
 };

@@ -26,12 +26,19 @@ public:
 	FORCEINLINE int32 GetMaxHealth() const { return MaxHealth; }
 	FORCEINLINE int32 GetCurrentHealth() const { return CurrentHealth; }
 
+	void SetMaxHealth(int32 NewMaxHealth);
+
+	void SetFullHealth();
+
 	FOnHealthZeroDelegate OnHealthZeroDelegate;
 	FOnHealthChangeDelegate OnHealthChangeDelegate;
 
 	void DoIntHealthDamage(int32 DamageAmount);
 
 private:
+
+	void SetCurrentHealth(int32 NewCurrentHealth);
+
 	UPROPERTY(EditAnywhere, Category = "Health")
 	int32 MaxHealth = 3;
 

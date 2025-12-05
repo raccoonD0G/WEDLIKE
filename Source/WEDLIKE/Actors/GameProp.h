@@ -55,18 +55,19 @@ private:
 	FVector HitEffectScale = FVector(0.1, 0.1, 0.1);
 
 	UPROPERTY(EditAnywhere)
-	FVector DeathEffectScale = FVector(0.5, 0.5, 0.5);
+	FVector DestroyedEffectScale = FVector(0.5, 0.5, 0.5);
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UNiagaraSystem> HitEffect;
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UNiagaraSystem> DeathEffect;
+	TObjectPtr<class UNiagaraSystem> DestroyedEffect;
 
 // Sound Section
 private:
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USoundBase> DeathSound;
+	TObjectPtr<class USoundBase> DestroyedSound;
 
-
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class USoundBase> HitSound;
 };

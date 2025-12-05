@@ -15,7 +15,8 @@ class WEDLIKE_API ALimitedPropSpawner : public AGamePropSpawner
 	GENERATED_BODY()
 	
 protected:
-	virtual class AGameProp* SpawnFallingProp() override;
+	virtual class AGameProp* BeginSpawnGameProp() override;
+	virtual class AGameProp* EndSpawnGameProp(class AGameProp* OnGoingGamePeop);
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -28,4 +29,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 MaxPropCount = 1;
+
+// Scale Section
+private:
+	UPROPERTY(EditAnywhere)
+	FVector LargeScale = FVector(2.0f, 2.0f, 2.0f);
+
+	UPROPERTY(EditAnywhere)
+	float LargeRatio = 0.2f;
 };

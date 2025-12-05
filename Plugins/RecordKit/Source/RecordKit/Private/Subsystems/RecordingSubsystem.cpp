@@ -13,22 +13,21 @@
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include <windows.h>
 #include "Windows/HideWindowsPlatformTypes.h"
+#include "ShellScalingApi.h"
 #endif
 
 #if PLATFORM_WINDOWS
-
 DEFINE_LOG_CATEGORY_STATIC(LogRecording, Log, All);
 
 static bool GetMonitorRectForGameWindow(int32& OutX, int32& OutY, int32& OutW, int32& OutH)
 {
-    TSharedPtr<SWindow> Top = FSlateApplication::Get().GetActiveTopLevelWindow();
-    if (!Top.IsValid())
+    // 1. 메인 게임 창 찾기
+    TSharedPtr<SWindow> Top = nullptr;
+    if (GEngine && GEngine->GameViewport)
     {
-        if (GEngine && GEngine->GameViewport)
-        {
-            Top = GEngine->GameViewport->GetWindow();
-        }
+        Top = GEngine->GameViewport->GetWindow();
     }
+
     if (!Top.IsValid())
     {
         return false;
@@ -46,22 +45,35 @@ static bool GetMonitorRectForGameWindow(int32& OutX, int32& OutY, int32& OutW, i
         return false;
     }
 
+    // 2. 현재 창이 있는 모니터 핸들 얻기
     HMONITOR HMon = MonitorFromWindow(Hwnd, MONITOR_DEFAULTTONEAREST);
     if (!HMon) return false;
 
-    MONITORINFO Mi;
-    Mi.cbSize = sizeof(MONITORINFO);
-    if (!GetMonitorInfo(HMon, &Mi))
+    // 3. 모니터 정보(논리적 크기) 가져오기
+    MONITORINFOEX MiEx;
+    MiEx.cbSize = sizeof(MONITORINFOEX);
+
+    if (GetMonitorInfo(HMon, &MiEx))
     {
-        return false;
+        DEVMODE DevMode;
+        DevMode.dmSize = sizeof(DEVMODE);
+
+        // 현재 그래픽 모드 조회 (ENUM_CURRENT_SETTINGS)
+        if (EnumDisplaySettings(MiEx.szDevice, ENUM_CURRENT_SETTINGS, &DevMode))
+        {
+            // DPI 설정 무시된 순수 물리 해상도
+            OutW = DevMode.dmPelsWidth;
+            OutH = DevMode.dmPelsHeight;
+
+            // 위치 정보 (다중 모니터 좌표)
+            OutX = DevMode.dmPosition.x;
+            OutY = DevMode.dmPosition.y;
+        }
     }
 
-    OutX = Mi.rcMonitor.left;
-    OutY = Mi.rcMonitor.top;
-    OutW = Mi.rcMonitor.right - Mi.rcMonitor.left;
-    OutH = Mi.rcMonitor.bottom - Mi.rcMonitor.top;
+    UE_LOG(LogTemp, Log, TEXT("LogRecording : %d, %d, %d, %d"), OutW, OutH, OutX, OutY);
 
-    // 짝수 보장(인코더가 4:2:0일 때 안전)
+    // 6. 짝수 보장 (인코딩 크래시 방지)
     if (OutW % 2) OutW -= 1;
     if (OutH % 2) OutH -= 1;
 
@@ -86,7 +98,7 @@ void URecordingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
         FString PluginDir = Plugin->GetBaseDir();
 
         FFmpegExe = FPaths::ConvertRelativePathToFull(
-            FPaths::Combine(PluginDir, TEXT("Content/FFmpeg/bin/ffmpeg.exe"))
+            FPaths::Combine(PluginDir, TEXT("ThirdParty/FFmpeg/bin/ffmpeg.exe"))
         );
     }
     else

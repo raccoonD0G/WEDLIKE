@@ -7,6 +7,8 @@
 #include "Widgets/RankingBoardWidget.h"
 #include "Widgets/DelayedTextBlock.h"
 #include <WEDLikeGameInstance.h>
+#include <Kismet/GameplayStatics.h>
+#include "Components/AudioComponent.h"
 
 void UResultWidget::NativeConstruct()
 {
@@ -20,6 +22,19 @@ void UResultWidget::NativeConstruct()
 
     int32 Count = FMath::Min(9, Scores.Num());
     bool bNewRecord = Scores.Num() < 9 || Scores[8].Score < LastScore;
+
+    if (bNewRecord)
+    {
+        if (NewRecordSound)
+        {
+            UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, NewRecordSound);
+            if (AudioComponent)
+            {
+                AudioComponent->Play();
+            }
+        }
+    }
+
     int32 HighScore = 0;
     if (Scores.IsEmpty())
     {
@@ -29,7 +44,6 @@ void UResultWidget::NativeConstruct()
     {
         HighScore = LastScore > Scores[0].Score ? LastScore : Scores[0].Score;
     }
-    
 
     if (bNewRecord && Scores.Num() >= 9 && Count != 0)
     {

@@ -42,9 +42,11 @@ private:
 	UFUNCTION()
 	void StartBattle();
 
+	UFUNCTION()
+	void EndBattle();
+
 	void OpenResultLevel();
 
-	UFUNCTION()
 	void OpenResultLevelDelayed();
 
 	FTimerHandle ResultDelayHandle;
@@ -69,4 +71,18 @@ private:
 	FTimerHandle EasyTimerHandle;
 	FTimerHandle HardTimerHandle;
 	FTimerHandle FeverTimeTimerHandle;
+
+// Sound Section
+private:
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class USoundBase> GameStartSound;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class USoundBase> GameOverSound;
+
+	UFUNCTION()
+	void PlayCountSound(int32 CurrentCount);
+
+	UPROPERTY(EditAnywhere)
+	TMap<int32, TObjectPtr<class USoundBase>> CountSounds;
 };

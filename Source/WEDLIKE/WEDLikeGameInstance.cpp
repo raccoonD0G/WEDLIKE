@@ -5,6 +5,8 @@
 #include "Utilities/WindowHelper.h"
 #include "Objects/WindowHandle.h"
 #include "Widgets/UserInputWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 void UWEDLikeGameInstance::OnStart()
 {
@@ -17,6 +19,8 @@ void UWEDLikeGameInstance::OnStart()
 	UserInputWidget = CreateWidget<UUserInputWidget>(this, UserInputWidgetClass);
 
 	WindowHandle->SetWindowContent(UserInputWidget);
+
+	PlayBGM();
 }
 
 void UWEDLikeGameInstance::SetNextPlayerEmail(const FString& InEmail)
@@ -86,4 +90,36 @@ void UWEDLikeGameInstance::SetIsAgreed(bool InIsAgreed)
 {
 	bIsAgreed = InIsAgreed;
 	OnIsAgreedChangedDelegate.Broadcast(bIsAgreed);
+}
+
+void UWEDLikeGameInstance::PlayBGM()
+{
+    if (!BGMAsset) return;
+
+    if (BGMComponent)
+    {
+        if (BGMComponent->Sound == BGMAsset && BGMComponent->IsPlaying())
+        {
+            return;
+        }
+
+        BGMComponent->Stop();
+    }
+
+    BGMComponent = UGameplayStatics::CreateSound2D(this, BGMAsset, 1.f, 1.f, 0.f, nullptr, true, false);
+
+    if (BGMComponent)
+    {
+        BGMComponent->bAutoDestroy = false;
+
+		BGMComponent->Play();
+    }
+}
+
+void UWEDLikeGameInstance::StopBGM()
+{
+    if (BGMComponent && BGMComponent->IsPlaying())
+    {
+        BGMComponent->Stop();
+    }
 }

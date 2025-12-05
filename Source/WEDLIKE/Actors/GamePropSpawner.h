@@ -26,7 +26,9 @@ private:
 
 // Spawn Section
 protected:
-	virtual class AGameProp* SpawnFallingProp();
+	virtual class AGameProp* BeginSpawnGameProp();
+
+	virtual class AGameProp* EndSpawnGameProp(class AGameProp* OnGoingGamePeop);
 
 	UFUNCTION(BlueprintCallable)
 	void StartSpawning();
@@ -61,6 +63,6 @@ private:
 private:
 	class ABattleGameState* GetBattleGameState();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	TMap<EGameStage, float> GameStageToSpawnInterval;
 };

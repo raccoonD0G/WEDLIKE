@@ -3,12 +3,30 @@
 
 #include "Actors/LimitedPropSpawner.h"
 #include "Actors/GameProp.h"
+#include "Components/IntHealthComponent.h"
 
-AGameProp* ALimitedPropSpawner::SpawnFallingProp()
+AGameProp* ALimitedPropSpawner::BeginSpawnGameProp()
 {
-	AGameProp* NewProp = Super::SpawnFallingProp();
+	AGameProp* NewProp = Super::BeginSpawnGameProp();
 
 	AddSpawnedProp(NewProp);
+
+	return NewProp;
+}
+
+AGameProp* ALimitedPropSpawner::EndSpawnGameProp(AGameProp* OnGoingGamePeop)
+{
+	AGameProp* NewProp = Super::EndSpawnGameProp(OnGoingGamePeop);
+
+	if (FMath::FRand() <= LargeRatio)
+	{
+		NewProp->SetActorScale3D(LargeScale);
+		UIntHealthComponent* IntHealthComponent = NewProp->GetIntHealthComponent();
+
+		int32 NewMaxHealth = IntHealthComponent->GetMaxHealth() * 2;
+		IntHealthComponent->SetMaxHealth(NewMaxHealth);
+		IntHealthComponent->SetFullHealth();
+	}
 
 	return NewProp;
 }

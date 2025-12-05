@@ -4,13 +4,11 @@
 #include "Actors/PhysicsProp.h"
 #include "Components/IntHealthComponent.h"
 #include "Components/BoxComponent.h"
-#include "Actors/StarFountainEffect.h"
 
 APhysicsProp::APhysicsProp()
 {
 	PhysicsRootComponent = RootComponent;
 
-	GetIntHealthComponent()->OnHealthChangeDelegate.AddDynamic(this, &APhysicsProp::PlayDamagedEffect);
 	PhysicsBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("PhysicsBoxComponent"));
 	RootComponent = PhysicsBoxComponent;
 
@@ -25,22 +23,7 @@ APhysicsProp::APhysicsProp()
 	GetHitBoxComponent()->OnComponentBeginOverlap.AddDynamic(this, &APhysicsProp::OnDamaged);
 }
 
-void APhysicsProp::PlayDamagedEffect(int32 NewCurrentHealth, int32 NewMaxHealth)
-{
-	UWorld* World = GetWorld();
-	if (!World) return;
 
-	FTransform EffectTransform = GetActorTransform();
-	FVector EffectLocation = EffectTransform.GetLocation();
-	EffectTransform.SetLocation(FVector(EffectLocation.X - 30.0f, EffectLocation.Y, EffectLocation.Z));
-
-	check(StarFountainEffectClass);
-
-	AStarFountainEffect* StarFountainEffect = World->SpawnActor<AStarFountainEffect>(StarFountainEffectClass, EffectTransform);
-	check(StarFountainEffect);
-
-	StarFountainEffect->SetActorRotation(FRotator());
-}
 
 void APhysicsProp::OnDamaged(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

@@ -12,7 +12,19 @@
 #include "Components/CanvasPanel.h"
 #include "Utilities/WidgetHelper.h"
 #include <NiagaraFunctionLibrary.h>
+#include "Actors/StarFountainEffect.h"
+#include <Subsystems/EmailScoreSubsystem.h>
 
+AScoreProp::AScoreProp()
+{
+	GetIntHealthComponent()->OnHealthChangeDelegate.AddDynamic(this, &AScoreProp::PlayDamagedEffect);
+
+	PropScores.Add(EPropType::OriginalRamyun, 1000);
+	PropScores.Add(EPropType::ShrimpRamyun, 1000);
+	PropScores.Add(EPropType::SpicyRamyun, 1000);
+	PropScores.Add(EPropType::Tangerine, 1000);
+	PropScores.Add(EPropType::Topokki, 1000);
+}
 
 void AScoreProp::PostInitializeComponents()
 {
@@ -60,6 +72,28 @@ void AScoreProp::OnHealthZero()
 {
 	Super::OnHealthZero();
 
+	UEmailScoreSubsystem* EmailScoreSubsystem = GetGameInstance()->GetSubsystem<UEmailScoreSubsystem>();
+	check(EmailScoreSubsystem);
+
+	EmailScoreSubsystem->AddLastScore(PropScores[GetPropType()]);
+
 	IncreasePropCount();
 	CreatePropIconWidget();
+}
+
+void AScoreProp::PlayDamagedEffect(int32 NewCurrentHealth, int32 NewMaxHealth)
+{
+	if (!StarFountainEffectClass) return;
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	FTransform EffectTransform = GetActorTransform();
+	FVector EffectLocation = EffectTransform.GetLocation();
+	EffectTransform.SetLocation(FVector(EffectLocation.X - 30.0f, EffectLocation.Y, EffectLocation.Z));
+
+	AStarFountainEffect* StarFountainEffect = World->SpawnActor<AStarFountainEffect>(StarFountainEffectClass, EffectTransform);
+	check(StarFountainEffect);
+
+	StarFountainEffect->SetActorRotation(FRotator());
 }

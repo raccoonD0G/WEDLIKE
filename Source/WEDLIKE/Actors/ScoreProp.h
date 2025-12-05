@@ -12,6 +12,9 @@ class WEDLIKE_API AScoreProp : public APhysicsProp
 {
 	GENERATED_BODY()
 	
+public:
+	AScoreProp();
+
 protected:
 	virtual void PostInitializeComponents() override;
 
@@ -31,4 +34,17 @@ private:
 // Health Section
 protected:
 	virtual void OnHealthZero() override;
+
+// Effect Section
+private:
+	UFUNCTION()
+	void PlayDamagedEffect(int32 NewCurrentHealth, int32 NewMaxHealth);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AStarFountainEffect> StarFountainEffectClass;
+
+// Score Section
+private:
+	UPROPERTY(EditAnywhere)
+	TMap<EPropType, int32> PropScores;
 };

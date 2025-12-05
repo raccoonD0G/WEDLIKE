@@ -13,8 +13,5 @@ UCLASS()
 class WEDLIKE_API AResultGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
 };

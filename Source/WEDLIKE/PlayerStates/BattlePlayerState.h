@@ -38,13 +38,18 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EPropType, int32> PropCounts;
 
-	UPROPERTY(VisibleAnywhere)
-	TMap<EPropType, int32> PropScores;
-
 	UPROPERTY(EditAnywhere)
 	int32 PlayVideoCount = 10;
 
 // Widget Section
 private:
 	void PlayVideoByType(EPropType PropType);
+
+// Score Section
+public:
+	FORCEINLINE const TMap<EPropType, int32>& GetPropActionScores() { return PropActionScores; }
+
+private:
+	UPROPERTY(EditAnywhere)
+	TMap<EPropType, int32> PropActionScores;
 };

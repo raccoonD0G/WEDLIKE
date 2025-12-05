@@ -4,11 +4,14 @@
 #include "GameStates/BattleGameState.h"
 #include "Components/TimerComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Components/AudioComponent.h"
 
 ABattleGameState::ABattleGameState()
 {
 	BattleTimerComponent = CreateDefaultSubobject<UTimerComponent>(TEXT("BattleTimerComponent"));
 	WaitingTimerComponent = CreateDefaultSubobject<UTimerComponent>(TEXT("WaitingTimerComponent"));
+
+	
 }
 
 void ABattleGameState::PostInitializeComponents()
@@ -18,13 +21,39 @@ void ABattleGameState::PostInitializeComponents()
 	WaitingTimerComponent->StartTimer();
 
 	WaitingTimerComponent->OnTimerEndDelegate.AddDynamic(this, &ABattleGameState::StartBattle);
-	BattleTimerComponent->OnTimerEndDelegate.AddDynamic(this, &ABattleGameState::OpenResultLevelDelayed);
+	BattleTimerComponent->OnTimerEndDelegate.AddDynamic(this, &ABattleGameState::EndBattle);
+
+	WaitingTimerComponent->OnTimerUpdateDelegate.AddDynamic(this, &ABattleGameState::PlayCountSound);
+	PlayCountSound(WaitingTimerComponent->GetCurrentTime());
 }
 
 void ABattleGameState::StartBattle()
 {
 	BattleTimerComponent->StartTimer();
 	SetGameLevelTimer();
+
+	if (GameStartSound)
+	{
+		UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, GameStartSound);
+		if (AudioComponent)
+		{
+			AudioComponent->Play();
+		}
+	}
+}
+
+void ABattleGameState::EndBattle()
+{
+	if(GameOverSound)
+	{
+		UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, GameOverSound);
+		if (AudioComponent)
+		{
+			AudioComponent->Play();
+		}
+	}
+
+	OpenResultLevelDelayed();
 }
 
 void ABattleGameState::OpenResultLevel()
@@ -97,5 +126,17 @@ void ABattleGameState::SetGameLevelTimer()
 			25.0f,
 			false);
 
+	}
+}
+
+void ABattleGameState::PlayCountSound(int32 CurrentCount)
+{
+	if (CountSounds.Contains(CurrentCount))
+	{
+		UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, CountSounds[CurrentCount]);
+		if (AudioComponent)
+		{
+			AudioComponent->Play();
+		}
 	}
 }
