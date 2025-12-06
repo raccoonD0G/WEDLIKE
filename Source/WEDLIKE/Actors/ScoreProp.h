@@ -34,6 +34,7 @@ private:
 // Health Section
 protected:
 	virtual void OnHealthZero() override;
+	virtual void OnHealthChange(int32 NewCurrentHealth, int32 NewMaxHealth) override;
 
 // Effect Section
 private:
@@ -46,5 +47,8 @@ private:
 // Score Section
 private:
 	UPROPERTY(EditAnywhere)
-	TMap<EPropType, int32> PropScores;
+	TMap<EPropType, int32> PropHealthZeroScores;
+
+	UPROPERTY(EditAnywhere)
+	TMap<EPropType, int32> PropHitScores;
 };

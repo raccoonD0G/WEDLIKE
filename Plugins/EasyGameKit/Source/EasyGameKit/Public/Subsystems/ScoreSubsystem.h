@@ -38,7 +38,6 @@ public:
 
     void CommitScoreAndSave();
 
-public:
     const TArray<FScoreData>& GetScores();
 
 	FScoreData EmptyScore;
@@ -48,13 +47,17 @@ public:
 protected:
     class IUserIDInterface* UserIDInterface = nullptr;
 
-private:
-    int32 LastScore = 0;
-    int32 HighScore = 0;
+    virtual void CreateScoreSave();
+
+    UPROPERTY()
+    class UScoreSaveGame* ScoreSaveGame;
 
     const FString ScoreSaveSlot = TEXT("ScoreSaveSlot");
     const uint32 UserIndex = 0;
 
-    UPROPERTY()
-    class UScoreSaveGame* ScoreSaveGame;
+private:
+    int32 LastScore = 0;
+    int32 HighScore = 0;
+
+    
 };

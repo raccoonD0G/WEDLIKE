@@ -19,11 +19,17 @@ AScoreProp::AScoreProp()
 {
 	GetIntHealthComponent()->OnHealthChangeDelegate.AddDynamic(this, &AScoreProp::PlayDamagedEffect);
 
-	PropScores.Add(EPropType::OriginalRamyun, 1000);
-	PropScores.Add(EPropType::ShrimpRamyun, 1000);
-	PropScores.Add(EPropType::SpicyRamyun, 1000);
-	PropScores.Add(EPropType::Tangerine, 1000);
-	PropScores.Add(EPropType::Topokki, 1000);
+	PropHealthZeroScores.Add(EPropType::OriginalRamyun, 1000);
+	PropHealthZeroScores.Add(EPropType::ShrimpRamyun, 1000);
+	PropHealthZeroScores.Add(EPropType::SpicyRamyun, 1000);
+	PropHealthZeroScores.Add(EPropType::Tangerine, 1000);
+	PropHealthZeroScores.Add(EPropType::Topokki, 1000);
+
+	PropHitScores.Add(EPropType::OriginalRamyun, 300);
+	PropHitScores.Add(EPropType::ShrimpRamyun, 300);
+	PropHitScores.Add(EPropType::SpicyRamyun, 300);
+	PropHitScores.Add(EPropType::Tangerine, 300);
+	PropHitScores.Add(EPropType::Topokki, 300);
 }
 
 void AScoreProp::PostInitializeComponents()
@@ -75,10 +81,20 @@ void AScoreProp::OnHealthZero()
 	UEmailScoreSubsystem* EmailScoreSubsystem = GetGameInstance()->GetSubsystem<UEmailScoreSubsystem>();
 	check(EmailScoreSubsystem);
 
-	EmailScoreSubsystem->AddLastScore(PropScores[GetPropType()]);
+	EmailScoreSubsystem->AddLastScore(PropHealthZeroScores[GetPropType()]);
 
 	IncreasePropCount();
 	CreatePropIconWidget();
+}
+
+void AScoreProp::OnHealthChange(int32 NewCurrentHealth, int32 NewMaxHealth)
+{
+	Super::OnHealthChange(NewCurrentHealth, NewMaxHealth);
+
+	UEmailScoreSubsystem* EmailScoreSubsystem = GetGameInstance()->GetSubsystem<UEmailScoreSubsystem>();
+	check(EmailScoreSubsystem);
+
+	EmailScoreSubsystem->AddLastScore(PropHealthZeroScores[GetPropType()]);
 }
 
 void AScoreProp::PlayDamagedEffect(int32 NewCurrentHealth, int32 NewMaxHealth)

@@ -38,7 +38,7 @@ protected:
 	virtual void OnHealthZero();
 
 	UFUNCTION()
-	void OnHealthChange(int32 NewCurrentHealth, int32 NewMaxHealth);
+	virtual void OnHealthChange(int32 NewCurrentHealth, int32 NewMaxHealth);
 
 private:
 	UPROPERTY(VisibleAnywhere)

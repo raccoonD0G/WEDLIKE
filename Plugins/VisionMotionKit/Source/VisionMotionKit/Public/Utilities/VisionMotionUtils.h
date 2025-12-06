@@ -1,6 +1,28 @@
 #pragma once
 #include "CoreMinimal.h"
 
+UENUM(BlueprintType)
+enum class ECOCOKeypoint : uint8
+{
+    Nose = 0,
+    LeftEye = 1,
+    RightEye = 2,
+    LeftEar = 3,
+    RightEar = 4,
+    LeftShoulder = 5,  // LSH
+    RightShoulder = 6, // RSH
+    LeftElbow = 7,   // LEL
+    RightElbow = 8,   // REL
+    LeftWrist = 9,   // LWR
+    RightWrist = 10,  // RWR
+    LeftHip = 11,  // LHIP
+    RightHip = 12,  // RHIP
+    LeftKnee = 13,  // LKNEE
+    RightKnee = 14,  // RKNEE
+    LeftAnkle = 15,  // LANKLE
+    RightAnkle = 16,  // RANKLE
+};
+
 namespace MotionCapture // 네임스페이스로 충돌 예방
 {
     // COCO 인덱스 상수

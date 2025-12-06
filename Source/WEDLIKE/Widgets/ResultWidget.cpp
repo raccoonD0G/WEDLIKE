@@ -57,7 +57,8 @@ void UResultWidget::NativeConstruct()
         {
             ScoreDuration = MaxScoreDuration * (float)(Scores[Index].Score) / (float)HighScore;
         }
-        RankingBoardWidget->AddRankingRowDirect(Scores[Index].UserID, Scores[Index].Score, ScoreDuration);
+        // RankingBoardWidget->AddRankingRowDirect(Scores[Index].UserID, Scores[Index].Score, ScoreDuration);
+        RankingBoardWidget->AddRankingRowDirect(Scores[Index].UserID, Scores[Index].Score, 0.0f);
     }
 
     UWEDLikeGameInstance* WEDLikeGameInstance = Cast<UWEDLikeGameInstance>(GetGameInstance());
@@ -71,7 +72,8 @@ void UResultWidget::NativeConstruct()
             ScoreDuration = MaxScoreDuration * (float)LastScore / (float)HighScore;
         }
         FString PlayerName = WEDLikeGameInstance->GetUserID();
-        URankingRowWidget* RankingRowWidget = RankingBoardWidget->AddRankingRowAnimated(PlayerName, LastScore, ScoreDuration);
+        // URankingRowWidget* RankingRowWidget = RankingBoardWidget->AddRankingRowAnimated(PlayerName, LastScore, ScoreDuration);
+        URankingRowWidget* RankingRowWidget = RankingBoardWidget->AddRankingRowAnimated(PlayerName, LastScore, 2.0f);
 		int32 NewRecordIndex = -1;
 		RankingBoardWidget->GetIndexOfRow(RankingRowWidget, NewRecordIndex);
 		RankingBoardWidget->HighlightRow(NewRecordIndex);

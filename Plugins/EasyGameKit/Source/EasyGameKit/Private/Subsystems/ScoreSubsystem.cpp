@@ -12,9 +12,7 @@ void UScoreSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
     if (!UGameplayStatics::DoesSaveGameExist(ScoreSaveSlot, UserIndex))
     {
-        USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UScoreSaveGame::StaticClass());
-        UGameplayStatics::SaveGameToSlot(SaveGameObject, ScoreSaveSlot, UserIndex);
-		ScoreSaveGame = Cast<UScoreSaveGame>(SaveGameObject);
+        CreateScoreSave();
     }
     else
     {
@@ -80,5 +78,12 @@ const TArray<FScoreData>& UScoreSubsystem::GetScores()
 int32 UScoreSubsystem::GetHighScore()
 {
     return HighScore;
+}
+
+void UScoreSubsystem::CreateScoreSave()
+{
+    USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UScoreSaveGame::StaticClass());
+    UGameplayStatics::SaveGameToSlot(SaveGameObject, ScoreSaveSlot, UserIndex);
+    ScoreSaveGame = Cast<UScoreSaveGame>(SaveGameObject);
 }
 

@@ -16,5 +16,7 @@ class WEDLIKE_API UEmailScoreSubsystem : public UScoreSubsystem
 	
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-	
+	virtual void CreateScoreSave() override;
+
+	void CommitDummyData();
 };

@@ -23,16 +23,6 @@ struct FTimedPoseSnapshot
     TArray<FHandPose> Hands;
 };
 
-// 공용 샘플 타입 (손 외에도 재사용)
-USTRUCT(BlueprintType)
-struct FSampleBase
-{
-    GENERATED_BODY()
-    double    T = 0.0;
-    FVector2D C = FVector2D::ZeroVector; // 공통 중심(예: 어깨중앙)
-    float     ScaleRef = 0.f;            // 정규화 분모(예: 어깨폭)
-};
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPoseWindowUpdated);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
