@@ -40,6 +40,8 @@ void ABattleGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	URecordingSubsystem* RecordingSubsystem = GetGameInstance()->GetSubsystem<URecordingSubsystem>();
 	RecordingSubsystem->StopRecording();
+
+	SaveEmailCSV();
 }
 
 
@@ -65,8 +67,6 @@ void ABattleGameMode::StartGame()
 
 void ABattleGameMode::EndGame()
 {
-	SaveEmailCSV();
-
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	check(PC);
 

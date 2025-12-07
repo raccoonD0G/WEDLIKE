@@ -55,15 +55,12 @@ void UUserInputWidget::NativeConstruct()
 
 FReply UUserInputWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
-	if (InKeyEvent.GetKey() == EKeys::SpaceBar)
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PC)
 	{
-		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		if (PC)
-		{
-			FInputKeyParams KeyParams(InKeyEvent.GetKey(), EInputEvent::IE_Pressed, 1.0);
-			PC->InputKey(KeyParams);
-			return FReply::Handled();
-		}
+		FInputKeyParams KeyParams(InKeyEvent.GetKey(), EInputEvent::IE_Pressed, 1.0);
+		PC->InputKey(KeyParams);
+		return FReply::Handled();
 	}
 
 	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
@@ -71,15 +68,12 @@ FReply UUserInputWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKey
 
 FReply UUserInputWidget::NativeOnKeyUp(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
-	if (InKeyEvent.GetKey() == EKeys::SpaceBar)
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PC)
 	{
-		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		if (PC)
-		{
-			FInputKeyParams KeyParams(InKeyEvent.GetKey(), EInputEvent::IE_Released, 0.0);
-			PC->InputKey(KeyParams);
-			return FReply::Handled();
-		}
+		FInputKeyParams KeyParams(InKeyEvent.GetKey(), EInputEvent::IE_Released, 0.0);
+		PC->InputKey(KeyParams);
+		return FReply::Handled();
 	}
 
 	return Super::NativeOnKeyUp(InGeometry, InKeyEvent);

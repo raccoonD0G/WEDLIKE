@@ -12,6 +12,7 @@
 #include <Subsystems/EmailScoreSubsystem.h>
 #include <Kismet/GameplayStatics.h>
 #include "Components/AudioComponent.h"
+#include "Animation/WidgetAnimation.h"
 
 void UBattleWidget::NativeConstruct()
 {
@@ -54,9 +55,10 @@ void UBattleWidget::NativeConstruct()
 
 	HideStartWidget();
 	HideGameOverWidget();
+	HideBonusImage();
 }
 
-void UBattleWidget::PlayVideoByType(EPropType VideoType)
+void UBattleWidget::PlayBonusVideo(EPropType VideoType)
 {
 	if (!VideoPlayer) return;
 
@@ -73,7 +75,7 @@ void UBattleWidget::PlayVideoByType(EPropType VideoType)
 
 	if (!(CheerSounds.IsEmpty()))
 	{
-		int32 SoundIndex = FMath::RandRange(0, CheerSounds.Num());
+		int32 SoundIndex = FMath::RandRange(0, CheerSounds.Num() - 1);
 
 		UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(this, CheerSounds[SoundIndex]);
 		if (AudioComponent)
@@ -136,6 +138,25 @@ void UBattleWidget::ShowGameOverWidget()
 void UBattleWidget::HideGameOverWidget()
 {
 	GameOverWidget->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UBattleWidget::OnBonus(EPropType VideoType)
+{
+	BonusImage->SetVisibility(ESlateVisibility::Visible);
+	PlayAnimation(Anim_Bonus);
+	PlayBonusVideo(VideoType);
+	GetWorld()->GetTimerManager().SetTimer(
+		GameOverWidgetTimerHandle,
+		this,
+		&UBattleWidget::HideBonusImage,
+		0.5f,
+		false
+	);
+}
+
+void UBattleWidget::HideBonusImage()
+{
+	BonusImage->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UBattleWidget::PlayGameOverWidget()

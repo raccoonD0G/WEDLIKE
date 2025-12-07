@@ -31,6 +31,9 @@ private:
 	class UInputAction* IA_LobbyThree = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* IA_LobbyS = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* IMC_Lobby = nullptr;
 
 private:
@@ -45,4 +48,5 @@ private:
 
 	void OpenSetting();
 
+	void OnSPressed();
 };

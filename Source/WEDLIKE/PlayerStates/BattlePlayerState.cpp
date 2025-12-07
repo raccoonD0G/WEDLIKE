@@ -40,16 +40,16 @@ void ABattlePlayerState::IncreasePropCount(EPropType PropType)
 {
 	PropCounts[PropType]++;
 	
-	if (PropCounts[PropType] % PlayVideoCount == 0)
+	if (PropCounts[PropType] % BonusCount == 0)
 	{
 		EmailScoreSubsystem->AddLastScore(PropActionScores[PropType]);
-		PlayVideoByType(PropType);
+		OnBonus(PropType);
 	}
 
 	OnPropCountChangeDelegate.Broadcast(PropType, PropCounts[PropType]);
 }
 
-void ABattlePlayerState::PlayVideoByType(EPropType PropType)
+void ABattlePlayerState::OnBonus(EPropType PropType)
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
@@ -63,5 +63,5 @@ void ABattlePlayerState::PlayVideoByType(EPropType PropType)
 	UBattleWidget* BattleWidget = Cast<UBattleWidget>(LevelHUD->GetLevelWidget());
 	if (!BattleWidget) return;
 
-	BattleWidget->PlayVideoByType(PropType);
+	BattleWidget->OnBonus(PropType);
 }

@@ -35,6 +35,8 @@ private:
 public:
 	class UTimerComponent* GetBattleTimerComponent() const { return BattleTimerComponent; }
 
+	void OpenResultLevel();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UTimerComponent> BattleTimerComponent;
@@ -44,8 +46,6 @@ private:
 
 	UFUNCTION()
 	void EndBattle();
-
-	void OpenResultLevel();
 
 	void OpenResultLevelDelayed();
 

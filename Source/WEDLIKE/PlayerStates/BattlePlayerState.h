@@ -39,11 +39,11 @@ private:
 	TMap<EPropType, int32> PropCounts;
 
 	UPROPERTY(EditAnywhere)
-	int32 PlayVideoCount = 10;
+	int32 BonusCount = 10;
 
 // Widget Section
 private:
-	void PlayVideoByType(EPropType PropType);
+	void OnBonus(EPropType PropType);
 
 // Score Section
 public:

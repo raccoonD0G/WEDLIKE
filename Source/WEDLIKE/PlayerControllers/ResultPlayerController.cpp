@@ -21,10 +21,16 @@ void AResultPlayerController::BeginPlay()
     if (UEnhancedInputComponent* EIC = Cast<UEnhancedInputComponent>(InputComponent))
     {
         EIC->BindAction(IA_ResultSpace, ETriggerEvent::Started, this, &AResultPlayerController::OnSpacePressed);
+        EIC->BindAction(IA_ResultS, ETriggerEvent::Started, this, &AResultPlayerController::OnSPressed);
     }
 }
 
 void AResultPlayerController::OnSpacePressed()
 {
     UGameplayStatics::OpenLevel(this, FName(TEXT("LobbyMap")));
+}
+
+void AResultPlayerController::OnSPressed()
+{
+    UGameplayStatics::OpenLevel(this, FName(TEXT("BattleMap")));
 }

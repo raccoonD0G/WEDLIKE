@@ -29,10 +29,9 @@ private:
 	TObjectPtr<class UCanvasPanel> CanvasPanel;
 
 // Video Section
-public:
-	void PlayVideoByType(EPropType VideoType);
-
 private:
+	void PlayBonusVideo(EPropType VideoType);
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UImage> VideoImage;
 
@@ -128,4 +127,19 @@ private:
 private:
 	UPROPERTY(EditAnywhere)
 	TArray<TObjectPtr<class USoundBase>> CheerSounds;
+
+// Bonus Section
+public:
+	void OnBonus(EPropType VideoType);
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	class UImage* BonusImage;
+
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* Anim_Bonus;
+
+	void HideBonusImage();
+
+	FTimerHandle BonusHandle;
 };

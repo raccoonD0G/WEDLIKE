@@ -29,6 +29,7 @@ void ALobbyPlayerController::BeginPlay()
         EIC->BindAction(IA_LobbyOne, ETriggerEvent::Started, this, &ALobbyPlayerController::OnOnePressed);
         EIC->BindAction(IA_LobbyTwo, ETriggerEvent::Started, this, &ALobbyPlayerController::OnTwoPressed);
         EIC->BindAction(IA_LobbyThree, ETriggerEvent::Started, this, &ALobbyPlayerController::OnThreePressed);
+        EIC->BindAction(IA_LobbyS, ETriggerEvent::Started, this, &ALobbyPlayerController::OnSPressed);
     }
 }
 
@@ -96,4 +97,9 @@ void ALobbyPlayerController::OpenSetting()
     }
 
     LobbyWidget->OpenSetting();
+}
+
+void ALobbyPlayerController::OnSPressed()
+{
+    UGameplayStatics::OpenLevel(this, FName(TEXT("BattleMap")));
 }
